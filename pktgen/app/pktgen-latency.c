@@ -171,12 +171,13 @@ pktgen_print_static_data(void)
 void
 pktgen_page_latency(void)
 {
-	port_info_t *info;
+	static uint64_t avg_lat = 0;
+    port_info_t *info;
 	unsigned int pid, col, row;
 	unsigned sp;
 	char buff[32];
 	int display_cnt;
-	uint64_t avg_lat, ticks;
+	uint64_t ticks;
 
 	if (pktgen.flags & PRINT_LABELS_FLAG)
 		pktgen_print_static_data();
@@ -251,7 +252,7 @@ pktgen_page_latency(void)
 
 		row++;
 		ticks = rte_get_timer_hz() / 1000000;
-		avg_lat = 0;
+		
 		if (info->latency_nb_pkts) {
 			avg_lat = (info->avg_latency / info->latency_nb_pkts) / ticks;
 			if (avg_lat > info->max_latency)
@@ -275,12 +276,11 @@ pktgen_page_latency(void)
 		snprintf(buff, sizeof(buff), "%" PRIu64, info->prev_stats.ipackets);
 		scrn_printf(row++, col, "%*s", COLUMN_WIDTH_1, buff);
 
-		avg_lat = 0;
 		if (info->prev_stats.ipackets)
 			snprintf(buff, sizeof(buff), "%" PRIu64,
 				 (info->jitter_count * 100) / info->prev_stats.ipackets);
 		else
-			snprintf(buff, sizeof(buff), "%" PRIu64, avg_lat);
+			snprintf(buff, sizeof(buff), "%d", 0);
 
 		scrn_printf(row++, col, "%*s", COLUMN_WIDTH_1, buff);
 
