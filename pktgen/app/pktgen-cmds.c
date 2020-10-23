@@ -2864,7 +2864,7 @@ range_set_dst_ip(port_info_t *info, char *what, struct pg_ipaddr *ip)
 		info->range.dst_ip_max = ntohl(ip->ipv4.s_addr);
         if (traffic_gen_as == IL_TRAFFIC_RESP ||
 			traffic_gen_as == IL_TRAFFIC_RESP_AS_REF) {
-          subs = ntohl(ip->ipv4.s_addr)-info->range.src_ip_min+1;
+          subs = ntohl(ip->ipv4.s_addr)-info->range.dst_ip_min+1;
           set_ip_pkt_counters(subs);
           end_ip =  ntohl(ip->ipv4.s_addr); 
         }
